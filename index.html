@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Generator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-code"></i> Portfolio Generator
+            </a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="generator-container">
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step-item active" data-step="1">1</div>
+                <div class="step-item" data-step="2">2</div>
+                <div class="step-item" data-step="3">3</div>
+                <div class="step-item" data-step="4">4</div>
+                <div class="step-item" data-step="5">5</div>
+            </div>
+
+            <!-- Step 1: Template Selection -->
+            <div class="step active" id="step1">
+                <h2 class="text-center mb-4">Choose Your Template</h2>
+                <div class="row">
+                    <div class="col-md-3 mb-4">
+                        <div class="template-card card h-100" data-template="modern">
+                            <div class="template-preview modern-preview">
+                                <div class="position-absolute bottom-0 start-0 p-3 text-white">
+                                    <h5>Modern</h5>
+                                    <small>Clean & Professional</small>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text text-center">Perfect for developers and designers</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="template-card card h-100" data-template="minimalist">
+                            <div class="template-preview minimalist-preview">
+                                <div class="position-absolute bottom-0 start-0 p-3">
+                                    <h5>Minimalist</h5>
+                                    <small>Simple & Elegant</small>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text text-center">Less is more approach</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="template-card card h-100" data-template="creative">
+                            <div class="template-preview creative-preview">
+                                <div class="position-absolute bottom-0 start-0 p-3 text-white">
+                                    <h5>Creative</h5>
+                                    <small>Bold & Artistic</small>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text text-center">For creative professionals</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="template-card card h-100" data-template="dark">
+                            <div class="template-preview dark-preview">
+                                <div class="position-absolute bottom-0 start-0 p-3 text-white">
+                                    <h5>Dark Mode</h5>
+                                    <small>Sleek & Modern</small>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text text-center">Perfect for tech enthusiasts</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary" onclick="nextStep()" disabled id="template-next">Next Step</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Personal Information -->
+            <div class="step" id="step2">
+                <h2 class="text-center mb-4">Personal Information</h2>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Full Name *</label>
+                        <input type="text" class="form-control" id="fullName" placeholder="xyz" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Professional Title *</label>
+                        <input type="text" class="form-control" id="title" placeholder="Full Stack Developer" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="john@example.com">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Phone</label>
+                        <input type="tel" class="form-control" id="phone" placeholder="+91 9876543210">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Location</label>
+                        <input type="text" class="form-control" id="location" placeholder="Hyderabad, Telangana">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Website/Portfolio URL</label>
+                        <input type="url" class="form-control" id="website" placeholder="https://yoursite.com(Business/Blog)">
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label class="form-label">About Me *</label>
+                        <textarea class="form-control" id="about" rows="4" placeholder="Write a brief description about yourself, your experience, and what you're passionate about..." required></textarea>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label class="form-label">Profile Photo</label>
+                        <div class="image-upload" onclick="document.getElementById('photo').click()">
+                            <input type="file" id="photo" accept="image/*" style="display:none" onchange="previewImage(this)">
+                            <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
+                            <p>Click to upload your profile photo</p>
+                            <div id="photo-preview"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-outline-primary me-2" onclick="prevStep()">Previous</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Next Step</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Skills -->
+            <div class="step" id="step3">
+                <h2 class="text-center mb-4">Skills & Technologies</h2>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Add Skill</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="skillInput" placeholder="e.g., JavaScript, Python, React...">
+                            <button class="btn btn-outline-primary" type="button" onclick="addSkill()">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Skill Level</label>
+                        <select class="form-select" id="skillLevel">
+                            <option value="Beginner">Beginner</option>
+                            <option value="Intermediate" selected>Intermediate</option>
+                            <option value="Advanced">Advanced</option>
+                            <option value="Expert">Expert</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <h5>Your Skills:</h5>
+                    <div id="skillsList"></div>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-outline-primary me-2" onclick="prevStep()">Previous</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Next Step</button>
+                </div>
+            </div>
+
+            <!-- Step 4: Projects -->
+            <div class="step" id="step4">
+                <h2 class="text-center mb-4">Projects</h2>
+                <div class="mb-4">
+                    <button class="btn btn-success" onclick="addProject()">
+                        <i class="fas fa-plus"></i> Add Project
+                    </button>
+                </div>
+                <div id="projectsList"></div>
+                <div class="text-center">
+                    <button class="btn btn-outline-primary me-2" onclick="prevStep()">Previous</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Next Step</button>
+                </div>
+            </div>
+
+            <!-- Step 5: Generate & Download -->
+            <div class="step" id="step5">
+                <h2 class="text-center mb-4">Generate Your Portfolio</h2>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <h5>Social Links (Optional)</h5>
+                        <div class="mb-2">
+                            <label class="form-label">LinkedIn</label>
+                            <input type="url" class="form-control" id="linkedin" placeholder="https://linkedin.com/in/yourusername">
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">GitHub</label>
+                            <input type="url" class="form-control" id="github" placeholder="https://github.com/yourusername">
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Twitter</label>
+                            <input type="url" class="form-control" id="twitter" placeholder="https://twitter.com/yourusername">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h5>Additional Options</h5>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="includeResume" checked>
+                            <label class="form-check-label" for="includeResume">Include Resume Section</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="includeContact" checked>
+                            <label class="form-check-label" for="includeContact">Include Contact Form</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="includeBlog">
+                            <label class="form-check-label" for="includeBlog">Include Blog Section</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="loading" class="loading-spinner">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-3">Generating your portfolio...</p>
+                </div>
+
+                <div id="success" class="success-animation">
+                    <i class="fas fa-check-circle success-icon"></i>
+                    <h3 class="text-success mt-3">Portfolio Generated Successfully!</h3>
+                    <p>Your portfolio is ready for download</p>
+                </div>
+
+                <div class="text-center" id="generate-buttons">
+                    <button class="btn btn-outline-primary me-2" onclick="prevStep()">Previous</button>
+                    <button class="btn btn-success me-2" onclick="previewPortfolio()">
+                        <i class="fas fa-eye"></i> Preview
+                    </button>
+                    <button class="btn btn-primary" onclick="generatePortfolio()">
+                        <i class="fas fa-download"></i> Generate & Download
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div class="modal fade preview-modal" id="previewModal" tabindex="-1">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Portfolio Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <iframe id="previewFrame" width="100%" height="600px" frameborder="0"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+    <script src="main.js"></script>
+    <script src="portfolio-generator.js"></script>
+    <script src="template-generator.js"></script>
+</body>
+</html>
