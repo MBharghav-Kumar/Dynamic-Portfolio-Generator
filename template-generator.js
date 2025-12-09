@@ -1118,7 +1118,315 @@ body {
 #skills.bg-light {
     background: #1e1e1e !important;
 }
-`
+`,
+
+          // NEW TEMPLATES START HERE
+          gradient: `
+/* Gradient Template */
+:root {
+    --primary-color: #667eea;
+    --secondary-color: #f093fb;
+    --accent-color: #764ba2;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+}
+
+.navbar {
+    background: linear-gradient(90deg, rgba(102, 126, 234, 0.95), rgba(240, 147, 251, 0.95)) !important;
+}
+
+.skill-item {
+    background: linear-gradient(45deg, #667eea, #f093fb);
+}
+
+.project-placeholder {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+}
+`,
+
+        neon: `
+/* Neon Template */
+:root {
+    --primary-color: #00f260;
+    --secondary-color: #0575e6;
+    --accent-color: #ff006e;
+    --dark-color: #0a0e27;
+    --text-color: #ffffff;
+}
+
+body {
+    background: #0a0e27;
+    color: var(--text-color);
+}
+
+.hero-section {
+    background: linear-gradient(135deg, #00f260 0%, #0575e6 50%, #ff006e 100%);
+    box-shadow: 0 0 50px rgba(0, 242, 96, 0.3);
+}
+
+.navbar {
+    background: rgba(10, 14, 39, 0.95) !important;
+    border-bottom: 2px solid rgba(0, 242, 96, 0.3);
+}
+
+.section-title {
+    color: var(--text-color);
+    text-shadow: 0 0 20px rgba(0, 242, 96, 0.5);
+}
+
+.skill-item {
+    background: linear-gradient(45deg, #00f260, #0575e6);
+    box-shadow: 0 0 20px rgba(0, 242, 96, 0.3);
+}
+
+.skill-item:hover {
+    box-shadow: 0 0 30px rgba(0, 242, 96, 0.6);
+}
+
+.project-card {
+    background: #1a1f3a;
+    color: var(--text-color);
+    border: 2px solid rgba(0, 242, 96, 0.2);
+}
+
+.project-card:hover {
+    border-color: rgba(0, 242, 96, 0.5);
+    box-shadow: 0 0 30px rgba(0, 242, 96, 0.3);
+}
+
+.project-title {
+    color: var(--primary-color);
+}
+
+#about {
+    background: #0f1428;
+}
+
+#skills.bg-light {
+    background: #1a1f3a !important;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #00f260, #0575e6);
+    border: none;
+    box-shadow: 0 0 20px rgba(0, 242, 96, 0.3);
+}
+
+.btn-primary:hover {
+    box-shadow: 0 0 30px rgba(0, 242, 96, 0.5);
+}
+`,
+        ocean: `
+/* Ocean Template */
+:root {
+    --primary-color: #2e3192;
+    --secondary-color: #1bffff;
+    --accent-color: #4a90e2;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, #2e3192 0%, #1bffff 100%);
+}
+
+.navbar {
+    background: rgba(46, 49, 146, 0.95) !important;
+}
+
+.skill-item {
+    background: linear-gradient(45deg, #2e3192, #1bffff);
+}
+
+.section-divider {
+    background: linear-gradient(45deg, #2e3192, #1bffff);
+}
+`,
+
+        sunset: `
+/* Sunset Template */
+:root {
+    --primary-color: #ff6b6b;
+    --secondary-color: #feca57;
+    --accent-color: #ee5a6f;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, #ff6b6b 0%, #feca57 50%, #ee5a6f 100%);
+}
+
+.navbar {
+    background: rgba(255, 107, 107, 0.95) !important;
+}
+
+.skill-item {
+    background: linear-gradient(45deg, #ff6b6b, #feca57);
+}
+
+.project-placeholder {
+    background: linear-gradient(135deg, #ff6b6b 0%, #feca57 50%, #ee5a6f 100%);
+}
+`,
+
+        forest: `
+/* Forest Template */
+:root {
+    --primary-color: #134e5e;
+    --secondary-color: #71b280;
+    --accent-color: #2ecc71;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, #134e5e 0%, #71b280 100%);
+}
+
+.navbar {
+    background: rgba(19, 78, 94, 0.95) !important;
+}
+
+.skill-item {
+    background: linear-gradient(45deg, #134e5e, #71b280);
+}
+
+.section-divider {
+    background: linear-gradient(45deg, #134e5e, #71b280);
+}
+`,
+
+        royal: `
+/* Royal Template */
+:root {
+    --primary-color: #4a148c;
+    --secondary-color: #9c27b0;
+    --accent-color: #ffd700;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, #4a148c 0%, #9c27b0 50%, #ffd700 100%);
+}
+
+.navbar {
+    background: rgba(74, 20, 140, 0.95) !important;
+}
+
+.skill-item {
+    background: linear-gradient(45deg, #4a148c, #9c27b0);
+}
+
+.project-placeholder {
+    background: linear-gradient(135deg, #4a148c 0%, #9c27b0 50%, #ffd700 100%);
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #4a148c, #ffd700);
+}
+`,
+
+        monochrome: `
+/* Monochrome Template */
+:root {
+    --primary-color: #000000;
+    --secondary-color: #434343;
+    --accent-color: #ffffff;
+    --text-color: #000000;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, #000000 0%, #434343 50%, #ffffff 100%);
+    color: var(--text-color);
+}
+
+.hero-section::before {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.navbar {
+    background: rgba(0, 0, 0, 0.95) !important;
+}
+
+.skill-item {
+    background: linear-gradient(45deg, #000000, #434343);
+    color: white;
+}
+
+.project-card {
+    border: 2px solid #000;
+}
+
+.project-card:hover {
+    border-color: #434343;
+}
+
+#about {
+    background: #f5f5f5;
+}
+
+#skills.bg-light {
+    background: #e0e0e0 !important;
+}
+`,
+
+        pastel: `
+/* Pastel Template */
+:root {
+    --primary-color: #ffeaa7;
+    --secondary-color: #fab1a0;
+    --accent-color: #dfe6e9;
+    --text-color: #2d3436;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, #ffeaa7 0%, #dfe6e9 50%, #fab1a0 100%);
+    color: var(--text-color);
+}
+
+.hero-section::before {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.navbar {
+    background: rgba(255, 234, 167, 0.95) !important;
+}
+
+.nav-link {
+    color: rgba(45, 52, 54, 0.8) !important;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--text-color) !important;
+}
+
+.skill-item {
+    background: linear-gradient(45deg, #ffeaa7, #fab1a0);
+    color: var(--text-color);
+}
+
+.section-title {
+    color: var(--text-color);
+}
+
+.social-links a,
+.footer-social a {
+    background: rgba(45, 52, 54, 0.1);
+    color: var(--text-color);
+}
+
+.social-links a:hover,
+.footer-social a:hover {
+    background: var(--primary-color);
+}
+
+#about {
+    background: #fef9e7;
+}
+
+#skills.bg-light {
+    background: #fce4ec !important;
+}
+`    
+
+
         };
 
         return baseCSS + (templateStyles[template] || templateStyles.modern);

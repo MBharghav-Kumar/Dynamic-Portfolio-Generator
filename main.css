@@ -531,3 +531,35 @@ body {
 .border-radius-custom {
     border-radius: var(--border-radius);
 }
+
+.gradient-preview {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+}
+
+.neon-preview {
+    background: linear-gradient(135deg, #00f260 0%, #0575e6 50%, #ff006e 100%);
+}
+
+.ocean-preview {
+    background: linear-gradient(135deg, #2e3192 0%, #1bffff 100%);
+}
+
+.sunset-preview {
+    background: linear-gradient(135deg, #ff6b6b 0%, #feca57 50%, #ee5a6f 100%);
+}
+
+.forest-preview {
+    background: linear-gradient(135deg, #134e5e 0%, #71b280 100%);
+}
+
+.royal-preview {
+    background: linear-gradient(135deg, #4a148c 0%, #9c27b0 50%, #ffd700 100%);
+}
+
+.monochrome-preview {
+    background: linear-gradient(135deg, #494949 0%, #434343 50%, #ffffff 100%);
+}
+
+.pastel-preview {
+    background: linear-gradient(135deg, #ffeaa7 0%, #dfe6e9 50%, #fab1a0 100%);
+}
