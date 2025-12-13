@@ -24,10 +24,11 @@ class PortfolioPackager {
         return this.zip;
     }
 
-    async addHTMLFile(data) {
-        const html = window.TemplateGenerator.generatePortfolioHTML(data);
-        this.zip.file("index.html", html);
-    }
+async addHTMLFile(data) {
+    // Generate with external CSS/JS files (inline = false)
+    const html = window.TemplateGenerator.generatePortfolioHTML(data, false);
+    this.zip.file("index.html", html);
+}
 
     async addCSSFiles(data, cssFolder) {
         const mainCSS = window.TemplateGenerator.generateCSS(data.template);

@@ -328,18 +328,50 @@ body {
 
 /* Preview Modal */
 .preview-modal .modal-content {
-    border-radius: 20px;
+    border-radius: 0;
     overflow: hidden;
+    height: 100vh;
 }
 
 .preview-modal .modal-header {
     background: var(--primary-gradient);
     color: white;
     border: none;
+    padding: 15px 20px;
 }
 
-.preview-modal .btn-close {
+.preview-modal .modal-title {
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.preview-modal .btn-close-white {
     filter: brightness(0) invert(1);
+}
+
+.preview-modal .modal-body {
+    padding: 0;
+    height: calc(100vh - 60px);
+}
+
+.preview-modal iframe {
+    border: none;
+}
+
+/* Add animation to modal */
+.preview-modal.show .modal-dialog {
+    animation: zoomIn 0.3s ease-out;
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 

@@ -322,22 +322,29 @@ class PortfolioGenerator {
         };
     }
 
-    previewPortfolio() {
-        const portfolioData = this.collectPortfolioData();
-        
-        if (!this.validatePortfolioData(portfolioData)) {
-            return;
-        }
-        
-        const html = window.TemplateGenerator.generatePortfolioHTML(portfolioData);
-        
-        // Create blob URL for preview
-        const blob = new Blob([html], { type: 'text/html' });
-        const url = URL.createObjectURL(blob);
-        
-        document.getElementById('previewFrame').src = url;
-        new bootstrap.Modal(document.getElementById('previewModal')).show();
+previewPortfolio() {
+    const portfolioData = this.collectPortfolioData();
+    
+    if (!this.validatePortfolioData(portfolioData)) {
+        return;
     }
+    
+    // Generate HTML with INLINE styles for preview (inline = true)
+    const html = window.TemplateGenerator.generatePortfolioHTML(portfolioData, true);
+    
+    // Create blob URL for preview
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    
+    document.getElementById('previewFrame').src = url;
+    const modal = new bootstrap.Modal(document.getElementById('previewModal'));
+    modal.show();
+    
+    // Clean up blob URL when modal is closed
+    document.getElementById('previewModal').addEventListener('hidden.bs.modal', function() {
+        URL.revokeObjectURL(url);
+    }, { once: true });
+}
 
     validatePortfolioData(data) {
         if (!data.name || !data.title || !data.about) {
@@ -353,63 +360,63 @@ class PortfolioGenerator {
         return true;
     }
 
-    async generatePortfolio() {
-        const portfolioData = this.collectPortfolioData();
-        
-        if (!this.validatePortfolioData(portfolioData)) {
-            return;
-        }
-        
-        // Show loading state
-        document.getElementById('generate-buttons').style.display = 'none';
-        document.getElementById('loading').style.display = 'block';
-        
-        try {
-            await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate processing time
-            
-            const zip = new JSZip();
-            
-            // Generate HTML
-            const html = window.TemplateGenerator.generatePortfolioHTML(portfolioData);
-            zip.file("index.html", html);
-            
-            // Generate CSS
-            const css = window.TemplateGenerator.generateCSS(this.selectedTemplate);
-            zip.file("assets/css/style.css", css);
-            
-            // Generate JavaScript
-            const js = window.TemplateGenerator.generateJS();
-            zip.file("assets/js/script.js", js);
-            
-            // Add README
-            const readme = this.generateReadme(portfolioData);
-            zip.file("README.md", readme);
-            
-            // Add additional assets if needed
-            zip.file("assets/css/bootstrap.min.css", "/* Bootstrap CSS will be loaded from CDN */");
-            zip.file("assets/js/bootstrap.bundle.min.js", "/* Bootstrap JS will be loaded from CDN */");
-            
-            // Generate and download zip
-            const content = await zip.generateAsync({type:"blob"});
-            this.downloadFile(content, `${portfolioData.name.replace(/\s+/g, '-').toLowerCase()}-portfolio.zip`);
-            
-            // Show success state
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('success').style.display = 'block';
-            
-            setTimeout(() => {
-                document.getElementById('success').style.display = 'none';
-                document.getElementById('generate-buttons').style.display = 'block';
-            }, 3000);
-            
-        } catch (error) {
-            console.error('Error generating portfolio:', error);
-            this.showErrorMessage('An error occurred while generating your portfolio. Please try again.');
-            
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('generate-buttons').style.display = 'block';
-        }
+async generatePortfolio() {
+    const portfolioData = this.collectPortfolioData();
+    
+    if (!this.validatePortfolioData(portfolioData)) {
+        return;
     }
+    
+    // Show loading state
+    document.getElementById('generate-buttons').style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
+    
+    try {
+        await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate processing time
+        
+        const zip = new JSZip();
+        
+        // Generate HTML with EXTERNAL files (inline = false)
+        const html = window.TemplateGenerator.generatePortfolioHTML(portfolioData, false);
+        zip.file("index.html", html);
+        
+        // Generate CSS
+        const css = window.TemplateGenerator.generateCSS(portfolioData.template);
+        zip.file("assets/css/style.css", css);
+        
+        // Generate JavaScript
+        const js = window.TemplateGenerator.generateJS();
+        zip.file("assets/js/script.js", js);
+        
+        // Add README
+        const readme = this.generateReadme(portfolioData);
+        zip.file("README.md", readme);
+        
+        // Add additional assets if needed
+        zip.file("assets/css/bootstrap.min.css", "/* Bootstrap CSS will be loaded from CDN */");
+        zip.file("assets/js/bootstrap.bundle.min.js", "/* Bootstrap JS will be loaded from CDN */");
+        
+        // Generate and download zip
+        const content = await zip.generateAsync({type:"blob"});
+        this.downloadFile(content, `${portfolioData.name.replace(/\s+/g, '-').toLowerCase()}-portfolio.zip`);
+        
+        // Show success state
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('success').style.display = 'block';
+        
+        setTimeout(() => {
+            document.getElementById('success').style.display = 'none';
+            document.getElementById('generate-buttons').style.display = 'block';
+        }, 3000);
+        
+    } catch (error) {
+        console.error('Error generating portfolio:', error);
+        this.showErrorMessage('An error occurred while generating your portfolio. Please try again.');
+        
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('generate-buttons').style.display = 'block';
+    }
+}
 
     generateReadme(data) {
         return `# ${data.name}'s Portfolio
@@ -559,3 +566,4 @@ const toastStyles = `
 `;
 
 document.head.insertAdjacentHTML('beforeend', toastStyles);
+

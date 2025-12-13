@@ -1,7 +1,55 @@
 // template-generator.js
 class TemplateGenerator {
-    static generatePortfolioHTML(data) {
-        return `<!DOCTYPE html>
+static generatePortfolioHTML(data, inline = false) {
+    const cssLink = inline ? 
+        `<style>\n${this.generateCSS(data.template)}\n</style>` : 
+        `<link rel="stylesheet" href="assets/css/style.css">`;
+    
+    const jsScript = inline ? 
+        `<script>\n${this.generateJS()}\n</script>` : 
+        `<script src="assets/js/script.js"></script>`;
+    
+    const previewBanner = inline ? `
+    <!-- Preview Banner -->
+    <div class="preview-banner">
+        <i class="fas fa-eye"></i>
+        <strong>Preview Mode</strong> - This is how your portfolio will look. Close this window to continue editing.
+    </div>
+
+    <style>
+    .preview-banner {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        z-index: 10001;
+        font-size: 14px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    
+    .preview-banner i {
+        margin-right: 8px;
+    }
+    
+    body {
+        padding-top: 40px !important;
+    }
+
+    
+    .navbar {
+        top: 40px !important;
+    }
+    </style>
+    ` : '';
+    
+    const scrollOffset = inline ? '110' : '70';
+    
+    
+    return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -21,10 +69,11 @@ class TemplateGenerator {
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
     
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="assets/css/style.css">
+    ${cssLink}
 </head>
-<body data-bs-spy="scroll" data-bs-target="#navbar" data-bs-offset="70">
+<body data-bs-spy="scroll" data-bs-target="#navbar" data-bs-offset="${scrollOffset}">
     
+    ${previewBanner}
     <!-- Navigation -->
     <nav id="navbar" class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
@@ -126,7 +175,7 @@ class TemplateGenerator {
                                     </div>
                                 </div>
                             ` : ''}
-                            
+
                             ${data.phone ? `
                                 <div class="col-md-6 mb-3">
                                     <div class="info-item">
@@ -137,7 +186,7 @@ class TemplateGenerator {
                                         </div>
                                     </div>
                                 </div>
-                            ` : ''}
+                            ` : ''}                            
                             
                             ${data.location ? `
                                 <div class="col-md-6 mb-3">
@@ -225,6 +274,7 @@ class TemplateGenerator {
                                                     <i class="fas fa-external-link-alt"></i>
                                                 </a>` : ''
                                             }
+                                            
                                             ${project.source ? 
                                                 `<a href="${project.source}" target="_blank" class="btn btn-light btn-sm">
                                                     <i class="fab fa-github"></i>
@@ -232,7 +282,7 @@ class TemplateGenerator {
                                             }
                                         </div>
                                     </div>
-                                </div>` : 
+                                </div>` :
                                 `<div class="project-placeholder">
                                     <i class="fas fa-code"></i>
                                 </div>`
@@ -279,6 +329,7 @@ class TemplateGenerator {
         </div>
     </footer>
 
+
     <!-- Back to Top Button -->
     <button id="backToTop" class="back-to-top" aria-label="Back to top">
         <i class="fas fa-chevron-up"></i>
@@ -287,10 +338,10 @@ class TemplateGenerator {
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <script src="assets/js/script.js"></script>
+    ${jsScript}
 </body>
 </html>`;
-    }
+}
 
     static generateSocialLinks(data, context = 'hero') {
         const links = [];
@@ -1432,6 +1483,8 @@ body {
         return baseCSS + (templateStyles[template] || templateStyles.modern);
     }
 
+
+
     static generateJS() {
         return `
 // Portfolio JavaScript
@@ -1689,6 +1742,7 @@ document.head.insertAdjacentHTML('beforeend', notificationStyles);
 `;
     }
 }
+
 
 // Make TemplateGenerator available globally
 window.TemplateGenerator = TemplateGenerator;  
