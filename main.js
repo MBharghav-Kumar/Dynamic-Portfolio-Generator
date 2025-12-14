@@ -261,69 +261,90 @@ class PortfolioGenerator {
         });
     }
 
-    previewProjectImage(projectIndex, input) {
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                document.getElementById(`projectImagePreview-${projectIndex}`).innerHTML = 
-                    `<img src="${e.target.result}" alt="Project Preview" style="max-width: 200px; max-height: 150px; object-fit: cover; border-radius: 8px;">`;
+previewProjectImage(projectIndex, input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            // Store the data URL
+            const dataURL = e.target.result;
+            
+            // Show preview
+            document.getElementById(`projectImagePreview-${projectIndex}`).innerHTML = 
+                `<img src="${dataURL}" alt="Project Preview" style="max-width: 200px; max-height: 150px; object-fit: cover; border-radius: 8px;">`;
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+    async collectProjectData() {
+    const projectData = [];
+
+
+    for (let index = 0; index < this.projects.length; index++) {
+        const nameElement = document.getElementById(`projectName-${index}`);
+        const techElement = document.getElementById(`projectTech-${index}`);
+        const descElement = document.getElementById(`projectDesc-${index}`);
+        const liveElement = document.getElementById(`projectLive-${index}`);
+        const sourceElement = document.getElementById(`projectSource-${index}`);
+        const imageElement = document.getElementById(`projectImage-${index}`);
+            
+        if (nameElement && nameElement.value.trim()) {
+            // Convert image file to data URL if exists
+            let imageDataURL = '';
+            if (imageElement && imageElement.files[0]) {
+                imageDataURL = await this.fileToDataURL(imageElement.files[0]);
             }
-            reader.readAsDataURL(input.files[0]);
+
+            const project = {
+                name: nameElement.value.trim(),
+                tech: techElement ? techElement.value.trim() : '',
+                desc: descElement ? descElement.value.trim() : '',
+                live: liveElement ? liveElement.value.trim() : '',
+                source: sourceElement ? sourceElement.value.trim() : '',
+                image: imageDataURL
+            };
+            projectData.push(project);
         }
     }
+    return projectData;
+}
 
-    collectProjectData() {
-        const projectData = [];
-        this.projects.forEach((_, index) => {
-            const nameElement = document.getElementById(`projectName-${index}`);
-            const techElement = document.getElementById(`projectTech-${index}`);
-            const descElement = document.getElementById(`projectDesc-${index}`);
-            const liveElement = document.getElementById(`projectLive-${index}`);
-            const sourceElement = document.getElementById(`projectSource-${index}`);
-            const imageElement = document.getElementById(`projectImage-${index}`);
-            
-            if (nameElement && nameElement.value.trim()) {
-                const project = {
-                    name: nameElement.value.trim(),
-                    tech: techElement ? techElement.value.trim() : '',
-                    desc: descElement ? descElement.value.trim() : '',
-                    live: liveElement ? liveElement.value.trim() : '',
-                    source: sourceElement ? sourceElement.value.trim() : '',
-                    image: imageElement && imageElement.files[0] ? 
-                        URL.createObjectURL(imageElement.files[0]) : ''
-                };
-                projectData.push(project);
-            }
-        });
-        return projectData;
-    }
+// Add this helper method to convert File to Data URL
+fileToDataURL(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.onerror = (e) => reject(e);
+        reader.readAsDataURL(file);
+    });
+}
 
-    collectPortfolioData() {
-        const projectData = this.collectProjectData();
+async collectPortfolioData() {
+    const projectData = await this.collectProjectData(); // Add await
         
-        return {
-            template: this.selectedTemplate,
-            name: document.getElementById('fullName').value.trim(),
-            title: document.getElementById('title').value.trim(),
-            email: document.getElementById('email').value.trim(),
-            phone: document.getElementById('phone').value.trim(),
-            location: document.getElementById('location').value.trim(),
-            website: document.getElementById('website').value.trim(),
-            about: document.getElementById('about').value.trim(),
-            photo: this.profilePhoto,
-            skills: this.skills,
-            projects: projectData,
-            linkedin: document.getElementById('linkedin').value.trim(),
-            github: document.getElementById('github').value.trim(),
-            twitter: document.getElementById('twitter').value.trim(),
-            includeResume: document.getElementById('includeResume').checked,
-            includeContact: document.getElementById('includeContact').checked,
-            includeBlog: document.getElementById('includeBlog').checked
-        };
-    }
+    return {
+        template: this.selectedTemplate,
+        name: document.getElementById('fullName').value.trim(),
+        title: document.getElementById('title').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        location: document.getElementById('location').value.trim(),
+        website: document.getElementById('website').value.trim(),
+        about: document.getElementById('about').value.trim(),
+        photo: this.profilePhoto,
+        skills: this.skills,
+        projects: projectData,
+        linkedin: document.getElementById('linkedin').value.trim(),
+        github: document.getElementById('github').value.trim(),
+        twitter: document.getElementById('twitter').value.trim(),
+        includeResume: document.getElementById('includeResume').checked,
+        includeContact: document.getElementById('includeContact').checked,
+        includeBlog: document.getElementById('includeBlog').checked
+    };
+}
 
-previewPortfolio() {
-    const portfolioData = this.collectPortfolioData();
+async previewPortfolio() {
+    const portfolioData = await this.collectPortfolioData(); // Add await
     
     if (!this.validatePortfolioData(portfolioData)) {
         return;
@@ -361,7 +382,7 @@ previewPortfolio() {
     }
 
 async generatePortfolio() {
-    const portfolioData = this.collectPortfolioData();
+    const portfolioData = await this.collectPortfolioData(); // Add await
     
     if (!this.validatePortfolioData(portfolioData)) {
         return;
@@ -387,14 +408,33 @@ async generatePortfolio() {
         // Generate JavaScript
         const js = window.TemplateGenerator.generateJS();
         zip.file("assets/js/script.js", js);
-        
+
+        // Add profile photo if exists
+        if (portfolioData.photo) {
+            const photoBlob = await this.dataURLToBlob(portfolioData.photo);
+            zip.file("assets/images/profile.jpg", photoBlob, { binary: true });
+        }
+
+        // Add project images if exist
+        for (let i = 0; i < portfolioData.projects.length; i++) {
+            const project = portfolioData.projects[i];
+            if (project.image) {
+                try {
+                    const projectBlob = await this.dataURLToBlob(project.image);
+                    zip.file(`assets/images/project-${i + 1}.jpg`, projectBlob, { binary: true });
+                } catch (error) {
+                    console.warn(`Could not add image for project ${i + 1}:`, error);
+                }
+            }
+        }
+
         // Add README
         const readme = this.generateReadme(portfolioData);
         zip.file("README.md", readme);
         
         // Add additional assets if needed
-        zip.file("assets/css/bootstrap.min.css", "/* Bootstrap CSS will be loaded from CDN */");
-        zip.file("assets/js/bootstrap.bundle.min.js", "/* Bootstrap JS will be loaded from CDN */");
+//        zip.file("assets/css/bootstrap.min.css", "/* Bootstrap CSS will be loaded from CDN */");
+  //      zip.file("assets/js/bootstrap.bundle.min.js", "/* Bootstrap JS will be loaded from CDN */");
         
         // Generate and download zip
         const content = await zip.generateAsync({type:"blob"});
@@ -416,6 +456,12 @@ async generatePortfolio() {
         document.getElementById('loading').style.display = 'none';
         document.getElementById('generate-buttons').style.display = 'block';
     }
+}
+
+// Add helper method to convert data URL to Blob
+async dataURLToBlob(dataURL) {
+    const response = await fetch(dataURL);
+    return await response.blob();
 }
 
     generateReadme(data) {
@@ -511,12 +557,12 @@ function addProject() {
     portfolioGen.addProject();
 }
 
-function previewPortfolio() {
-    portfolioGen.previewPortfolio();
+async function previewPortfolio() {
+    await portfolioGen.previewPortfolio(); // Add async/await
 }
 
-function generatePortfolio() {
-    portfolioGen.generatePortfolio();
+async function generatePortfolio() {
+    await portfolioGen.generatePortfolio(); // Add async/await
 }
 
 function previewImage(input) {

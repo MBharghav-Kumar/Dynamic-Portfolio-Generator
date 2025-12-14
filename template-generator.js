@@ -77,7 +77,7 @@ static generatePortfolioHTML(data, inline = false) {
     <!-- Navigation -->
     <nav id="navbar" class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="#home">
+            <a class="navbar-brand fw-bold" href="#" conclick="scrollToTop(event)">
                 ${data.name}
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -86,7 +86,7 @@ static generatePortfolioHTML(data, inline = false) {
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#home">Home</a>
+                        <a class="nav-link" href="#" onclick="scrollToTop(event)">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#about">About</a>
@@ -448,7 +448,14 @@ body {
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 80px;
+  scroll-padding-top: 70px;
+}
+
+/* Hero Section - Ensure it starts at absolute top */
+#home.hero-section {
+  margin-top: 0;
+  padding-top: 80px; /* Account for fixed navbar */
+  scroll-margin-top: 0; /* Override global scroll-padding for home */
 }
 
 /* Typography */
@@ -1514,8 +1521,26 @@ document.addEventListener('DOMContentLoaded', function() {
     // Smooth scrolling for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
+            const href = this.getAttribute('href');
+            
+            // Special handling for home/top
+            if (href === '#' || href === '#home') {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+
+                // Update active state
+                updateActiveNav('home');
+                
+                // Update URL
+                history.pushState(null, null, '#home');
+                return;
+            }
+
             e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
+            const target = document.querySelector(href);
             if (target) {
                 const navbarHeight = navbar ? navbar.offsetHeight : 0;
                 const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
@@ -1524,9 +1549,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     top: targetPosition,
                     behavior: 'smooth'
                 });
+                
 
-                //Update URL without scrolling
-                history.pushState(null, null, this.getAttribute('href'));
+                // Update URL without scrolling
+                history.pushState(null, null, href);
             }
         });
     });
@@ -1537,14 +1563,35 @@ document.addEventListener('DOMContentLoaded', function() {
             top: 0,
             behavior: 'smooth'
         });
+        
+        // Update active state
+        updateActiveNav('home');
     });
 
     // Active navigation highlighting
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-link');
 
+    function updateActiveNav(sectionId) {
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            const linkHref = link.getAttribute('href');
+            if (linkHref === '#' + sectionId || (sectionId === 'home' && linkHref === '#')) {
+                link.classList.add('active');
+            }
+        });
+    }
+
     function highlightNavigation() {
         let scrollPosition = window.scrollY + 100;
+
+        // Special case: if at very top, highlight Home
+        if (window.scrollY < 100) {
+            updateActiveNav('home');
+            return;
+        }
+
+
 
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
@@ -1552,17 +1599,15 @@ document.addEventListener('DOMContentLoaded', function() {
             const sectionId = section.getAttribute('id');
 
             if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === '#' + sectionId) {
-                        link.classList.add('active');
-                    }
-                });
+                updateActiveNav(sectionId);
             }
         });
     }
 
     window.addEventListener('scroll', highlightNavigation);
+    
+    // Initial highlight
+    highlightNavigation();
 
     // Contact form handling
     const contactForm = document.getElementById('contactForm');
@@ -1652,12 +1697,12 @@ document.addEventListener('DOMContentLoaded', function() {
             if (i < text.length) {
                 heroTitle.textContent += text.charAt(i);
                 i++;
-                setTimeout(typeWriter, 100);
+                setTimeout(typeWriter, 70);
             }
         };
         
         // Start typing effect after page load
-        setTimeout(typeWriter, 1000);
+        setTimeout(typeWriter, 700);
     }
 
     // Parallax effect for hero section
@@ -1674,6 +1719,27 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('%c🚀 Portfolio loaded successfully!', 'color: #667eea; font-size: 16px; font-weight: bold;');
     console.log('%cMade with ❤️ using Dynamic Portfolio Generator', 'color: #666; font-size: 12px;');
 });
+
+// Global function for scrolling to top (called from HTML onclick)
+function scrollToTop(e) {
+    if (e) e.preventDefault();
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+    
+    // Update active nav
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+        const linkHref = link.getAttribute('href');
+        if (linkHref === '#' || linkHref === '#home') {
+            link.classList.add('active');
+        }
+    });
+
+    // Update URL
+    history.pushState(null, null, '#home');
+}
 
 // Add notification styles
 const notificationStyles = \`
